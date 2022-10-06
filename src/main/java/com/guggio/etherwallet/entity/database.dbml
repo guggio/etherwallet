@@ -1,0 +1,38 @@
+Table ether_address {
+  id long PK
+  address varchar [unique]
+}
+
+Table ether_balance {
+  id long PK
+  address_id long [ref: > ether_address.id]
+  blockNumber long
+  value varchar
+
+  Indexes {
+   (address_id, blockNumber) [unique]
+  }
+}
+
+Table erc20token {
+  id long PK
+  contract_address varchar [unique]
+  name varchar
+  symbol varchar
+  decimal_places integer
+
+}
+
+Table erc20balance {
+  id long PK
+  address_id long [ref: > ether_address.id]
+  erc20_token_id long [ref: > erc20token.id]
+  blockNumber long
+  value varchar
+
+  Indexes {
+    (address_id, erc20_token_id, blockNumber) [unique]
+  }
+
+}
+
