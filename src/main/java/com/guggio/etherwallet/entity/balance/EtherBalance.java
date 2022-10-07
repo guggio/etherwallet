@@ -6,6 +6,7 @@ import lombok.*;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.math.BigInteger;
+import java.util.Objects;
 
 @Entity
 @Table(uniqueConstraints = {@UniqueConstraint(name = "UniqueAddressAndBlock", columnNames = {"address_id", "blockNumber"})})
@@ -17,7 +18,9 @@ import java.math.BigInteger;
 public class EtherBalance {
 
   @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
+  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "ether_balance_seq")
+  @SequenceGenerator(name = "ether_balance_seq", sequenceName = "ether_balance_seq", allocationSize = 1)
+  @Column(nullable = false)
   private Long id;
   @ManyToOne
   @JoinColumn(name = "address_id", nullable = false, foreignKey = @ForeignKey(name = "eth_balance_address_id"))
@@ -33,5 +36,18 @@ public class EtherBalance {
 
   public void setValue(BigInteger value) {
     this.value = value.toString();
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (!(o instanceof EtherBalance)) return false;
+    EtherBalance that = (EtherBalance) o;
+    return id.equals(that.id);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(id);
   }
 }
