@@ -1,15 +1,29 @@
 package com.guggio.etherwallet.entity.balance;
 
 import com.guggio.etherwallet.entity.address.EtherAddress;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.ForeignKey;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotNull;
 import java.math.BigInteger;
 import java.util.Objects;
 
 @Entity
-@Table(uniqueConstraints = {@UniqueConstraint(name = "UniqueAddressAndBlock", columnNames = {"address_id", "blockNumber"})})
+@Table(uniqueConstraints = {@UniqueConstraint(name = "UniqueAddressAndBlock", columnNames = {"owner_address", "blockNumber"})})
 @Getter
 @Setter
 @ToString
@@ -23,7 +37,7 @@ public class EtherBalance {
   @Column(nullable = false)
   private Long id;
   @ManyToOne
-  @JoinColumn(name = "address_id", nullable = false, foreignKey = @ForeignKey(name = "eth_balance_address_id"))
+  @JoinColumn(name = "owner_address", nullable = false, foreignKey = @ForeignKey(name = "eth_balance_owner_address"))
   private EtherAddress etherAddress;
   @NotNull
   private Long blockNumber;
