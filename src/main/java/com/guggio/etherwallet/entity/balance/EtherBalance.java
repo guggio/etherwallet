@@ -23,7 +23,9 @@ import java.math.BigInteger;
 import java.util.Objects;
 
 @Entity
-@Table(uniqueConstraints = {@UniqueConstraint(name = "UniqueAddressAndBlock", columnNames = {"owner_address", "blockNumber"})})
+@Table(name = "EtherBalance", uniqueConstraints = {
+    @UniqueConstraint(name = "uc_etherbalance_owner_address", columnNames = {"owner_address", "timestamp"})
+})
 @Getter
 @Setter
 @ToString
@@ -40,7 +42,7 @@ public class EtherBalance {
   @JoinColumn(name = "owner_address", nullable = false, foreignKey = @ForeignKey(name = "eth_balance_owner_address"))
   private EtherAddress etherAddress;
   @NotNull
-  private Long blockNumber;
+  private Long timestamp;
   @NotNull
   private String value;
 
@@ -57,11 +59,12 @@ public class EtherBalance {
     if (this == o) return true;
     if (!(o instanceof EtherBalance)) return false;
     EtherBalance that = (EtherBalance) o;
-    return id.equals(that.id);
+    return Objects.equals(etherAddress, that.etherAddress)
+        && Objects.equals(timestamp, that.timestamp);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id);
+    return Objects.hash(etherAddress, timestamp);
   }
 }

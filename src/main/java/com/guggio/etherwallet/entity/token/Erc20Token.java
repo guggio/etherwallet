@@ -1,9 +1,16 @@
 package com.guggio.etherwallet.entity.token;
 
+import com.guggio.etherwallet.core.asset.Asset;
 import com.guggio.etherwallet.entity.balance.Erc20Balance;
-import lombok.*;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
 import java.util.Objects;
 import java.util.Set;
@@ -13,15 +20,9 @@ import java.util.Set;
 @Setter
 @ToString
 @RequiredArgsConstructor
-@AllArgsConstructor
-public class Erc20Token {
+public class Erc20Token implements Asset {
 
   @Id
-  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "erc20_token_seq")
-  @SequenceGenerator(name = "erc20_token_seq", sequenceName = "erc20_token_seq", allocationSize = 1)
-  @Column(nullable = false)
-  private Long id;
-  @Column(unique = true)
   @NotNull
   private String contractAddress;
   @NotNull
@@ -39,11 +40,11 @@ public class Erc20Token {
     if (this == o) return true;
     if (!(o instanceof Erc20Token)) return false;
     Erc20Token that = (Erc20Token) o;
-    return id.equals(that.id);
+    return contractAddress.equals(that.contractAddress);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id);
+    return Objects.hash(contractAddress);
   }
 }

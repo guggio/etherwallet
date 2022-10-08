@@ -1,5 +1,6 @@
 package com.guggio.etherwallet.entity.address;
 
+import com.guggio.etherwallet.core.address.ValidatedAddress;
 import com.guggio.etherwallet.entity.balance.Erc20Balance;
 import com.guggio.etherwallet.entity.balance.EtherBalance;
 import lombok.AllArgsConstructor;
@@ -34,6 +35,19 @@ public class EtherAddress {
   @OneToMany(mappedBy = "etherAddress", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
   @ToString.Exclude
   private Set<Erc20Balance> erc20Balances;
+
+  private EtherAddress(String address) {
+    this.address = address;
+  }
+
+  public static EtherAddress of(ValidatedAddress address) {
+    return new EtherAddress(address.getAddress());
+  }
+
+  public ValidatedAddress getAddress() {
+    return ValidatedAddress.of(address)
+        .orElseThrow(IllegalStateException::new);
+  }
 
   @Override
   public boolean equals(Object o) {
