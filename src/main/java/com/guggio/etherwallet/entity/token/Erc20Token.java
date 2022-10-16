@@ -2,6 +2,7 @@ package com.guggio.etherwallet.entity.token;
 
 import com.guggio.etherwallet.core.asset.Asset;
 import com.guggio.etherwallet.entity.balance.Erc20Balance;
+import com.guggio.etherwallet.service.external.moralis.WalletTokenBalance;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -34,6 +35,15 @@ public class Erc20Token implements Asset {
   @OneToMany(mappedBy = "erc20Token", fetch = FetchType.LAZY)
   @ToString.Exclude
   private Set<Erc20Balance> er20Balances;
+
+  public static Erc20Token of(WalletTokenBalance balance) {
+    Erc20Token erc20Token = new Erc20Token();
+    erc20Token.setContractAddress(balance.getToken_address());
+    erc20Token.setName(balance.getName());
+    erc20Token.setSymbol(balance.getSymbol());
+    erc20Token.setDecimalPlaces(balance.getDecimals());
+    return erc20Token;
+  }
 
   @Override
   public boolean equals(Object o) {

@@ -24,7 +24,9 @@ import java.math.BigInteger;
 import java.util.Objects;
 
 @Entity
-@Table(uniqueConstraints = {@UniqueConstraint(name = "UniqueAddressTokenAndBlock", columnNames = {"owner_address", "erc20_token_id", "blockNumber"})})
+@Table(name = "Erc20Balance", uniqueConstraints = {
+    @UniqueConstraint(name = "uc_erc20balance_owner_address", columnNames = {"owner_address", "erc20_token_id", "timestamp"})
+})
 @Getter
 @Setter
 @ToString
@@ -44,7 +46,7 @@ public class Erc20Balance {
   @JoinColumn(name = "erc20_token_id", nullable = false, foreignKey = @ForeignKey(name = "erc20_balance_token_id"))
   private Erc20Token erc20Token;
   @NotNull
-  private Long blockNumber;
+  private Long timestamp;
   private String value;
 
   public BigInteger getValue() {

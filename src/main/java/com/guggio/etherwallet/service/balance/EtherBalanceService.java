@@ -6,7 +6,8 @@ import com.guggio.etherwallet.entity.address.EtherAddress;
 import com.guggio.etherwallet.entity.balance.EtherBalance;
 import com.guggio.etherwallet.repository.balance.EtherBalanceRepository;
 import com.guggio.etherwallet.service.address.EtherAddressService;
-import com.guggio.etherwallet.service.external.etherscan.EtherscanService;
+import com.guggio.etherwallet.service.external.moralis.MoralisService;
+import com.guggio.etherwallet.service.external.moralis.NativeBalance;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -21,9 +22,9 @@ import java.time.ZoneOffset;
 @Transactional
 public class EtherBalanceService {
 
-  private final EtherscanService etherscanService;
   private final EtherBalanceRepository etherBalanceRepository;
   private final EtherAddressService etherAddressService;
+  private final MoralisService moralisService;
 
   public Balance getBalanceOf(ValidatedAddress address) {
     EtherAddress etherAddress = etherAddressService.loadOrCreateNew(address);
@@ -37,7 +38,7 @@ public class EtherBalanceService {
   }
 
   private EtherBalance createEtherBalance(EtherAddress etherAddress) {
-    BigInteger balance = getBalanceFromEtherscan(etherAddress);
+    BigInteger balance = getBalanceFromMoralis(etherAddress);
     EtherBalance etherBalance = new EtherBalance();
     etherBalance.setEtherAddress(etherAddress);
     etherBalance.setTimestamp(getCurrentTimestamp());
@@ -45,8 +46,10 @@ public class EtherBalanceService {
     return etherBalance;
   }
 
-  private BigInteger getBalanceFromEtherscan(EtherAddress etherAddress) {
-    return etherscanService.getBalanceOf(etherAddress.getAddress());
+  private BigInteger getBalanceFromMoralis(EtherAddress etherAddress) {
+    return moralisService.getNativeBalanceOf(etherAddress.getAddress())
+        .map(NativeBalance::getBalance)
+        .orElseThrow();
   }
 
   private long getCurrentTimestamp() {
