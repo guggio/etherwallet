@@ -1,11 +1,13 @@
 package com.guggio.etherwallet.core.asset;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.guggio.etherwallet.entity.balance.Erc20Balance;
 import com.guggio.etherwallet.entity.balance.EtherBalance;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
 
+@JsonDeserialize(as = BalanceImpl.class)
 public interface Balance {
 
   String getAssetName();
