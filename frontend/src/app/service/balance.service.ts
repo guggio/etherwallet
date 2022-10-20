@@ -13,7 +13,7 @@ export class BalanceService {
 
   constructor(private http: HttpClient) {}
 
-  public getEtherBalance(address: string): Observable<Balance> {
+  public getEtherBalance$(address: string): Observable<Balance> {
     return this.http
       .get<EtherBalanceResponse>(`${this.apiUrl}/ether/${address}`)
       .pipe(
@@ -22,7 +22,7 @@ export class BalanceService {
       );
   }
 
-  public getErc20Balances(address: string): Observable<Balance[]> {
+  public getErc20Balances$(address: string): Observable<Balance[]> {
     return this.http
       .get<Erc20BalancesResponse>(`${this.apiUrl}/erc20/all/${address}`)
       .pipe(

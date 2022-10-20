@@ -32,19 +32,9 @@
           </form>
           <ul class="text-center list-inline py-3">
             <li class="list-inline-item">
-              <span>
-                <select
-                  (ngModelChange)="filterType($event)"
-                  ngModel="ALL"
-                  name="balanceType"
-                  class="btn btn-info"
-                  style="height: 32.91px"
-                >
-                  <option value="ALL">ALL</option>
-                  <option value="ETH">ETH</option>
-                  <option value="ERC20">ERC20</option>
-                </select>
-              </span>
+              <ng-container *ngIf="ethBalance$ | async as ethBalance">
+                <span style="color: white">Dein ETH-Guthaben beträgt {{ ethBalance.normalizedValue }}</span>
+              </ng-container>
             </li>
           </ul>
         </div>
@@ -60,11 +50,13 @@
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let balance of allBalances">
-                <td>{{ balance.assetName }}</td>
-                <td>{{ balance.assetSymbol }}</td>
-                <td>{{ balance.normalizedValue }}</td>
-              </tr>
+              <ng-container *ngIf="erc20Balances$ | async as erc20Balances">
+                <tr *ngFor="let balance of erc20Balances">
+                  <td>{{ balance.assetName }}</td>
+                  <td>{{ balance.assetSymbol }}</td>
+                  <td>{{ balance.normalizedValue }}</td>
+                </tr>
+              </ng-container>
             </tbody>
           </table>
         </div>

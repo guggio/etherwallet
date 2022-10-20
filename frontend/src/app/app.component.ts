@@ -1,19 +1,19 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { Observable } from 'rxjs';
 import { Balance } from './model/balance';
-import { BalanceType } from './model/enum/balance-type';
 import { BalanceService } from './service/balance.service';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AppComponent {
   title = 'Eth Balances';
   address: string = '';
-  ethBalance: Balance = {} as Balance;
-  erc20Balances: Balance[] = [];
-  balanceType: BalanceType = BalanceType.ALL;
+  ethBalance$: Observable<Balance> = new Observable();
+  erc20Balances$: Observable<Balance[]> = new Observable();
 
   constructor(private balanceService: BalanceService) {}
 
@@ -27,30 +27,10 @@ export class AppComponent {
   }
 
   private updateEthBalance() {
-    this.balanceService
-      .getEtherBalance(this.address)
-      .subscribe((data) => (this.ethBalance = data));
+    this.ethBalance$ = this.balanceService.getEtherBalance$(this.address);
   }
 
   private updateErc20Balances() {
-    this.balanceService
-      .getErc20Balances(this.address)
-      .subscribe((data) => (this.erc20Balances = data));
-  }
-
-  get allBalances(): Balance[] {
-    if(this.balanceType == BalanceType.ALL) {
-      return [this.ethBalance, ...this.erc20Balances];
-    } else if (this.balanceType == BalanceType.ETH) {
-      return [this.ethBalance];
-    } else if (this.balanceType == BalanceType.ERC20) {
-      return [...this.erc20Balances]
-    } else {
-      throw new Error(`Unknown Balancetype ${this.balanceType} selected!`);
-    }
-  }
-
-  filterType($event: BalanceType) {
-    this.balanceType = $event;
+    this.erc20Balances$ = this.balanceService.getErc20Balances$(this.address);
   }
 }
