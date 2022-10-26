@@ -66,7 +66,7 @@ class BalanceControllerTest {
 
     @Test
     void shouldRetrieveEtherBalanceAndCreateNewEtherAddressRecordGivenValidNewAddress() throws Exception {
-      String address = "0x94bfA52346fd2CB7c24eeeB159843EF0E221f766";
+      String address = "0xe1cc2f34832C7023254A11e76eB91Be0d316262a";
       BigInteger valueInWei = new BigInteger("1000000000000000000");
       when(moralisService.getNativeBalanceOf(any())).thenReturn(Optional.of(createNativeBalance(valueInWei)));
 
@@ -83,7 +83,7 @@ class BalanceControllerTest {
 
     @Test
     void shouldRetrieveEtherBalanceAndNotCreateNewEtherAddressRecordGivenValidExistingAddress() throws Exception {
-      String address = "0x94bfA52346fd2CB7c24eeeB159843EF0E221f766";
+      String address = "0xe1cc2f34832C7023254A11e76eB91Be0d316262a";
       BigInteger valueInWei = new BigInteger("1000000000000000000");
       when(moralisService.getNativeBalanceOf(any())).thenReturn(Optional.of(createNativeBalance(valueInWei)));
 
@@ -101,7 +101,7 @@ class BalanceControllerTest {
 
     @Test
     void shouldRespondWithErrorWhenGettingEtherBalanceGivenInvalidAddress() throws Exception {
-      String address = "0x94bfA52346fd2CB7c24eeeB159843EF0E221f76";
+      String address = "0xe1cc2f34832C7023254A11e76eB91Be0d316262";
 
       // precondition, that EtherAddress does not yet exist in db
       assertFalse(etherAddressRepository.existsById(address));
@@ -181,7 +181,7 @@ class BalanceControllerTest {
 
     @Test
     void shouldRetrieveErc20BalancesAndCreateNewEtherAddressRecordGivenValidNewAddress() throws Exception {
-      String address = "0x94bfA52346fd2CB7c24eeeB159843EF0E221f766";
+      String address = "0xe1cc2f34832C7023254A11e76eB91Be0d316262a";
 
       BigInteger wethBalance = new BigInteger("1000000000000000000");
       BigInteger usdcBalance = new BigInteger("1000000000");
@@ -212,7 +212,7 @@ class BalanceControllerTest {
 
     @Test
     void shouldRetrieveErc20BalancesAndNotCreateNewEtherAddressRecordGivenValidExistingAddress() throws Exception {
-      String address = "0x94bfA52346fd2CB7c24eeeB159843EF0E221f766";
+      String address = "0xe1cc2f34832C7023254A11e76eB91Be0d316262a";
 
       BigInteger wethBalance = new BigInteger("1000000000000000000");
       BigInteger usdcBalance = new BigInteger("1000000000");
@@ -246,7 +246,7 @@ class BalanceControllerTest {
 
     @Test
     void shouldRespondWithErrorGivenInvalidAddress() throws Exception {
-      String address = "0x94bfA52346fd2CB7c24eeeB159843EF0E221f76";
+      String address = "0xe1cc2f34832C7023254A11e76eB91Be0d316262";
 
       // precondition, that EtherAddress does not yet exist in db
       assertFalse(etherAddressRepository.existsById(address));
